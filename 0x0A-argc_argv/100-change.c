@@ -2,42 +2,50 @@
 #include <stdlib.h>
 
 /**
- * main - prints the minimum number of coins
- *        to make change for an amount of money.
- *
- * @argc: holds the number of arguments passed
- * @argv: array pointer that holds the arguments passed
- *
- * Return: Always 0 (Success)
-*/
-
-int main(int argc, char *argv[])
+ * main - prints the min number of coins to make change
+ * for an amount of money
+ * @argc: argument count
+ * @argv: arguments
+ * Return: 0
+ */
+int main(int argc, char **argv)
 {
-	int cents, coins_number = 0;
+	int total, count;
+	unsigned int i;
+	char *p;
+	int cents[] = {25, 10, 5, 2};
 
 	if (argc != 2)
 	{
 		printf("Error\n");
 		return (1);
 	}
+
+	total = strtol(argv[1], &p, 10);
+	count = 0;
+
+	if (!*p)
+	{
+		while (total > 1)
+		{
+			for (i = 0; i < sizeof(cents[i]); i++)
+			{
+				if (total >= cents[i])
+				{
+					count += total / cents[i];
+					total = total % cents[i];
+				}
+			}
+		}
+		if (total == 1)
+			count++;
+	}
 	else
 	{
-		cents = atoi(argv[1]);
-		while (cents > 0)
-		{
-			if (cents >= 25)
-				cents -= 25;
-			else if (cents >= 10)
-				cents -= 10;
-			else if (cents >= 5)
-				cents -= 5;
-			else if (cents >= 2)
-				cents -= 2;
-			else if (cents >= 1)
-				cents -= 1;
-			coins_number += 1;
-		}
+		printf("Error\n");
+		return (1);
 	}
-	printf("%d\n", coins_number);
+
+	printf("%d\n", count);
 	return (0);
 }
